@@ -1,22 +1,27 @@
 package ctl
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/manifoldco/promptui"
 )
 
 var StackTypes = []string{"local", "docker", "docker-compose"}
 
 type Stack struct {
-	Name      string      `yaml:"name"`
-	RedisAddr string      `yaml:"redisAddr"`
-	Kind      string      `yaml:"kind"`
-	Apps      []AppConfig `yaml:"apps"`
+	Name        string      `yaml:"name"`
+	RedisAddr   string      `yaml:"redisAddr"`
+	ManageRedis bool        `yaml:"manageRedis"`
+	Kind        string      `yaml:"kind"`
+	Apps        []AppConfig `yaml:"apps"`
 }
 
 type AppConfig struct {
-	ID             string   `yaml:"id"`
-	InboundTopics  []string `yaml:"inboundTopics"`
-	OutboundTopics []string `yaml:"outboundTopics"`
+	ID             string              `yaml:"id"`
+	InboundTopics  []string            `yaml:"inboundTopics"`
+	OutboundTopics []string            `yaml:"outboundTopics"`
+	ComposeConfig  DockerComposeConfig `yaml:"composeConfig"`
 }
 
 // Generate a new, empty configuration
@@ -59,6 +64,30 @@ func NewStackWithPrompt() (*Stack, error) {
 	if err != nil {
 		return s, err
 	}
+
+	switch s.Kind {
+	case "docker-compose":
+		fmt.Println("docker-compose")
+	default:
+		fmt.Println("default")
+	}
+
+	// Set manageRedis
+	manageRedisSelection := promptui.Select{
+		Label: "Manage redis for you?",
+		Items: []bool{true, false},
+	}
+	_, res, err := manageRedisSelection.Run()
+	if err != nil {
+		return s, err
+	}
+
+	manageRedis, err := strconv.ParseBool(res)
+	if err != nil {
+		return s, err
+	}
+
+	s.ManageRedis = manageRedis
 
 	// Set redis
 	redisAddrPrompt := promptui.Prompt{
