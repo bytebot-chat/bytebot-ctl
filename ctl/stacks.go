@@ -18,10 +18,16 @@ type Stack struct {
 }
 
 type AppConfig struct {
-	ID             string              `yaml:"id"`
-	InboundTopics  []string            `yaml:"inboundTopics"`
-	OutboundTopics []string            `yaml:"outboundTopics"`
-	ComposeConfig  DockerComposeConfig `yaml:"composeConfig"`
+	ID             string   `yaml:"id"`
+	InboundTopics  []string `yaml:"inboundTopics"`
+	OutboundTopics []string `yaml:"outboundTopics"`
+	Ports          []string `yaml:"ports"`
+	Image          Image    `yaml:"image"`
+}
+
+type Image struct {
+	Name string `yaml:"name"`
+	Tag  string `yaml:"string"`
 }
 
 // Generate a new, empty configuration

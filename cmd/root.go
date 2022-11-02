@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Bren "fraq" Briggs <code@fraq.io>
-
 */
 package cmd
 
@@ -15,6 +14,16 @@ import (
 
 type Config struct {
 	Stacks []ctl.Stack
+}
+
+func (c Config) GetStackNames() []string {
+	stacks := []string{}
+
+	for _, stack := range c.Stacks {
+		stacks = append(stacks, stack.Name)
+	}
+
+	return stacks
 }
 
 var C Config
