@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Bren "fraq" Briggs <code@fraq.io>
-
 */
 package cmd
 
@@ -34,6 +33,4 @@ var getStackCmd = &cobra.Command{
 
 func init() {
 	getCmd.AddCommand(getStackCmd)
-	getStackCmd.Flags().StringVarP(&stackName, "name", "n", "", "Name of bytebot stack")
-	viper.BindPFlag("name", getStackCmd.Flags().Lookup("name"))
 }

@@ -40,6 +40,5 @@ var runStackCmd = &cobra.Command{
 
 func init() {
 	runCmd.AddCommand(runStackCmd)
-	runStackCmd.Flags().StringVarP(&stackName, "name", "n", "", "Name of bytebot stack")
-	viper.BindPFlag("name", runStackCmd.Flags().Lookup("name"))
+
 }

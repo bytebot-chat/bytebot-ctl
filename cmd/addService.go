@@ -12,7 +12,7 @@ import (
 	"github.com/bytebot-chat/bytebot-ctl/ctl"
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
+	"github.com/spf13/viper"
 )
 
 // serviceCmd represents the service command
@@ -35,13 +35,24 @@ var serviceCmd = &cobra.Command{
 		if err != nil {
 			fmt.Println(err)
 		}
-		yamlBytes, err := yaml.Marshal(appConfig)
 
+		// Update the global in-memory config first
+		fmt.Println("Updating config...")
+		for i, stack := range C.Stacks {
+			if stack.Name == stackName {
+				C.Stacks[i].Apps = append(C.Stacks[i].Apps, appConfig)
+			}
+		}
+
+		// Then write it to viper
+		viper.Set("stacks", C.Stacks)
+		fmt.Println("Writing config to disk...")
+		// Then dump the config to disk
+		err = viper.WriteConfig()
 		if err != nil {
 			fmt.Println(err)
 		}
-
-		fmt.Println(string(yamlBytes))
+		fmt.Println("Done!")
 	},
 }
 

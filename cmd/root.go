@@ -63,9 +63,6 @@ func initConfig() {
 		viper.AddConfigPath(home)
 		viper.SetConfigType(cfgType)
 		viper.SetConfigName(cfgName)
-
-		var defaultStacks = &[]ctl.Stack{}
-		viper.SetDefault("stacks", defaultStacks)
 	}
 
 	viper.AutomaticEnv()
