@@ -24,11 +24,17 @@ var runStackCmd = &cobra.Command{
 					fmt.Println(err)
 					return
 				}
-				err = os.WriteFile("docker-compose.yaml", composeFile, 0644)
+
+				configYaml, err := composeFile.ToYaml()
+				if err != nil {
+					fmt.Println(err)
+				}
+				err = os.WriteFile("docker-compose.yaml", configYaml, 0644)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
+				fmt.Println(string(configYaml))
 			}
 		}
 	},

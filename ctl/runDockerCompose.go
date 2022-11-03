@@ -1,12 +1,70 @@
 package ctl
 
+import (
+	"fmt"
+
+	"gopkg.in/yaml.v2"
+)
+
 const COMPOSE_VERSION = "3.8"
 const REDIS_IMAGE = "redis"
 const REDIS_IMAGE_TAG = "6.2.3"
 
-func NewDockerComposeConfig(stack Stack) ([]byte, error) {
+type ComposeFile struct {
+	Version  string                    `yaml:"version"`
+	Services map[string]ComposeService `yaml:"services"`
+}
 
-	return []byte{}, nil
+func (c *ComposeFile) ToYaml() ([]byte, error) {
+	return yaml.Marshal(c)
+}
+
+type ComposeService struct {
+	ContainerName string   `yaml:"container_name"`
+	Image         string   `yaml:"image"`
+	Build         string   `yaml:"build,omitempty"`
+	Command       []string `yaml:"command"`
+	DependsOn     []string `yaml:"depends_on,omitempty"`
+	EnvFile       []string `yaml:"env_file,omitempty"`
+}
+
+func NewDockerComposeConfig(stack Stack) (*ComposeFile, error) {
+	config := new(ComposeFile)
+	config.Services = make(map[string]ComposeService)
+	prefix := stack.Name
+	config.Version = COMPOSE_VERSION
+
+	if stack.ManageRedis {
+		redisSvc := ComposeService{
+			ContainerName: fmt.Sprintf("%s-%s", prefix, "redis"),
+			Image:         fmt.Sprintf("%s:%s", REDIS_IMAGE, REDIS_IMAGE_TAG),
+		}
+		config.Services[fmt.Sprintf("%s-redis", prefix)] = redisSvc
+	}
+	for _, svc := range stack.Apps {
+		var command []string
+		for _, topic := range svc.InboundTopics {
+			command = append(command, "-inbound")
+			command = append(command, topic)
+		}
+
+		for _, topic := range svc.OutboundTopics {
+			command = append(command, "-outbound")
+			command = append(command, topic)
+		}
+
+		command = append(command, "-redis")
+		command = append(command, fmt.Sprintf(stack.RedisAddr))
+		command = append(command, svc.ExtraArgs...)
+
+		composeSvc := ComposeService{
+			ContainerName: fmt.Sprintf("%s-%s", prefix, svc.ID),
+			Image:         fmt.Sprintf("%s:%s", svc.Image.Name, svc.Image.Tag),
+			Command:       command,
+		}
+		config.Services[svc.ID] = composeSvc
+	}
+	return config, nil
 }
 
 /*

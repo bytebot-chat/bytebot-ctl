@@ -21,8 +21,9 @@ type AppConfig struct {
 	ID             string   `yaml:"id"`
 	InboundTopics  []string `yaml:"inboundTopics,omitempty"`
 	OutboundTopics []string `yaml:"outboundTopics,omitempty"`
-	Ports          []string `yaml:"ports,omitmepty"`
+	Ports          []string `yaml:"ports,omitempty"`
 	Image          Image    `yaml:"image"`
+	ExtraArgs      []string `yaml:"extra_args"`
 }
 
 type Image struct {
