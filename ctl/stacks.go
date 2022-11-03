@@ -7,7 +7,7 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-var StackTypes = []string{"local", "docker", "docker-compose"}
+var StackTypes = []string{"docker-compose"}
 
 type Stack struct {
 	Name        string      `yaml:"name"`
