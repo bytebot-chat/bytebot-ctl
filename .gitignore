@@ -16,3 +16,5 @@ vendor/
 
 # Files generated for testing
 *.yaml
+
+.vscode
