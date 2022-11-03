@@ -66,12 +66,10 @@ func addServicePrompt() (ctl.AppConfig, error) {
 	serviceNamePrompt := promptui.Prompt{
 		Label: "Name of the service to add",
 	}
-
 	id, err := serviceNamePrompt.Run()
 	if err != nil {
 		return app, err
 	}
-
 	app.ID = id
 
 	serviceImageNamePrompt := promptui.Prompt{
