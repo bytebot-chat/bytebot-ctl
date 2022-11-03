@@ -19,9 +19,9 @@ type Stack struct {
 
 type AppConfig struct {
 	ID             string   `yaml:"id"`
-	InboundTopics  []string `yaml:"inboundTopics"`
-	OutboundTopics []string `yaml:"outboundTopics"`
-	Ports          []string `yaml:"ports"`
+	InboundTopics  []string `yaml:"inboundTopics,omitempty"`
+	OutboundTopics []string `yaml:"outboundTopics,omitempty"`
+	Ports          []string `yaml:"ports,omitmepty"`
 	Image          Image    `yaml:"image"`
 }
 
