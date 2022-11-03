@@ -9,7 +9,6 @@ import (
 
 	"github.com/bytebot-chat/bytebot-ctl/ctl"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // stackCmd represents the stack command
@@ -17,13 +16,13 @@ var runStackCmd = &cobra.Command{
 	Use:   "stack",
 	Short: "Start or run a configured stack",
 	Run: func(cmd *cobra.Command, args []string) {
-		name := viper.GetString("name")
+		name := "test1"
 		createRedis := true
 
 		for _, stack := range C.Stacks {
 			switch stack.Kind {
 			case "docker-compose":
-				composeFile, err := ctl.NewDockerComposeFile(ctl.NewDockerComposeConfig(name, createRedis))
+				composeFile, err := ctl.NewDockerComposeConfig(stack)
 				if err != nil {
 					fmt.Println(err)
 					return
