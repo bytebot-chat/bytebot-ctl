@@ -27,7 +27,7 @@ type AppConfig struct {
 
 type Image struct {
 	Name string `yaml:"name"`
-	Tag  string `yaml:"string"`
+	Tag  string `yaml:"tag"`
 }
 
 // Generate a new, empty configuration
