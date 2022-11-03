@@ -16,9 +16,6 @@ var runStackCmd = &cobra.Command{
 	Use:   "stack",
 	Short: "Start or run a configured stack",
 	Run: func(cmd *cobra.Command, args []string) {
-		name := "test1"
-		createRedis := true
-
 		for _, stack := range C.Stacks {
 			switch stack.Kind {
 			case "docker-compose":
