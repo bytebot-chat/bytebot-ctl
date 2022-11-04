@@ -11,7 +11,7 @@ var StackTypes = []string{"docker-compose"}
 
 type Stack struct {
 	Name        string      `yaml:"name"`
-	RedisAddr   string      `yaml:"redisAddr"`
+	RedisAddr   string      `yaml:"redisAddr,omitempty"`
 	ManageRedis bool        `yaml:"manageRedis"`
 	Kind        string      `yaml:"kind"`
 	Apps        []AppConfig `yaml:"apps"`
